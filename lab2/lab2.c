@@ -56,8 +56,7 @@ int(timer_test_int)(uint8_t time) {
   int err = timer_subscribe_int(&irq_set);
   if (err) return err;
 
-  while( 1 ) { /* You may want to use a different condition */
-    /* Get a request message. */
+  while( counter < time * 60 ) {
     if ((err = driver_receive(ANY, &msg, &ipc_status)) != 0 ) { 
         printf("driver_receive failed with: %d", err);
         continue;
@@ -68,7 +67,7 @@ int(timer_test_int)(uint8_t time) {
                 if (msg.m_notify.interrupts & irq_set) { /* subscribed interrupt */
                   printf("Timer interrupt received\n");
                   timer_int_handler();
-                    if (counter % 60 == 0)
+                    if (counter % (int) sys_hz() == 0) //usually syz_hz = 60
                     {
                     timer_print_elapsed_time();
                     time--;
@@ -76,9 +75,11 @@ int(timer_test_int)(uint8_t time) {
                 }
                 break;
             default:
-                break; /* no other notifications expected: do nothing */	
+                break; 	
         }
     } else {
     }
   }
+  if (timer_unsubscribe_int() != 0) return 1;
+  return 0;
 } 
