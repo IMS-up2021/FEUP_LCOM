@@ -10,15 +10,24 @@
 #define TIMER(n) (TIMER_0 + n)
 #define TIMER_SEL(n) (n << 6)
 
+int counter = 0;
+
 int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
-  uint32_t control = TIMER_BIN | TIMER_SQR_WAVE | TIMER_LSB_MSB | TIMER_SEL(timer);
-  int err = sys_outb(TIMER_CTRL, control);
+
+  uint8_t status;
+  int err = timer_get_conf(timer, &status);
   if (err) return err;
 
-  err = sys_outb(TIMER(timer), freq & 0xFF);
+  uint32_t control = (status & 0xF) | TIMER_LSB_MSB | TIMER_SEL(timer);
+  err = sys_outb(TIMER_CTRL, control);
   if (err) return err;
 
-  err = sys_outb(TIMER(timer), (freq >> 8) & 0xFF);
+  uint32_t divisor = TIMER_FREQ / freq;
+
+  err = sys_outb(TIMER(timer), divisor & 0xFF);
+  if (err) return err;
+
+  err = sys_outb(TIMER(timer), (divisor >> 8) & 0xFF);
   if (err) return err;
 
   return 0;
