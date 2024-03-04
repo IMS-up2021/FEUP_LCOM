@@ -7,7 +7,7 @@
 #include <kbd.h>
 
 extern int counter;
-extern bool ih_flag;
+extern bool makecode;
 extern uint8_t scancode[2];
 
 int main(int argc, char *argv[]) {
@@ -65,7 +65,7 @@ int (kbd_test_scan)() {
               continue;
             }
 
-            kbd_print_scancode(ih_flag, (index + 1), scancode);
+            kbd_print_scancode(makecode, (index + 1), scancode);
             index = 0;
           }
           break;

@@ -3,7 +3,7 @@
 
 int hook_id = 1;
 int counter = 0, i = 0;
-bool ih_flag;
+bool makecode;
 uint8_t scancode[2];
 
 
@@ -51,7 +51,7 @@ void (kbc_ih)() {
 
     if (check_status(status) == OK) {
         scancode[i] = output;
-        ih_flag = (output != TWO_BYTE_SC) && (output & IS_BREAK);
+        makecode = (output == TWO_BYTE_SC) || !(output & IS_BREAK);
     }
 }
 
