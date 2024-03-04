@@ -1,17 +1,18 @@
 #include "kbd.h"
+#include "utils.h"
 
-static int hook_id = 1;
+int hook_id = 1;
 int counter = 0, i = 0;
 bool ih_flag;
 uint8_t scancode[2];
 
 
-int kbd_subscribe_int(uint8_t *bit_no) {
+int (kbd_subscribe_int)(uint8_t *bit_no) {
     *bit_no = hook_id;
     return sys_irqsetpolicy(KBD_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &hook_id);
 }
 
-int kbd_unsubscribe_int() {
+int (kbd_unsubscribe_int)() {
     return sys_irqrmpolicy(&hook_id);
 }
 
@@ -28,17 +29,17 @@ int check_status(uint8_t st) {
     return OK;
 }
 
-int kbd_get_status(uint8_t *st) {
+int (kbd_get_status)(uint8_t *st) {
     counter++;
     return util_sys_inb(STATUS_REG, st);
 }
 
-int kbd_read_out_buffer(uint8_t *output) {
+int (kbd_read_out_buffer)(uint8_t *output) {
     counter++;
     return util_sys_inb(OUT_BUF, output);
 }
 
-void kbc_ih(void) {
+void (kbc_ih)() {
     uint8_t output;
     uint8_t status;
 
@@ -54,7 +55,7 @@ void kbc_ih(void) {
     }
 }
 
-int kbd_reenable_ints() {
+int (kbd_reenable_ints)() {
     uint8_t output;
 
     if (kbd_write_cmd(KBC_CMD_REG, READ_CMDB) != 0) {
@@ -82,7 +83,7 @@ int kbd_reenable_ints() {
     return 0;
 }
 
-int kbd_write_cmd(int port, uint8_t cmd) {
+int (kbd_write_cmd)(int port, uint8_t cmd) {
     int timeout = 0;
     uint8_t st;
 
@@ -104,7 +105,7 @@ int kbd_write_cmd(int port, uint8_t cmd) {
     return -1;
 }
 
-int kbd_read_ret_cmd(uint8_t *data) {
+int (kbd_read_ret_cmd)(uint8_t *data) {
     int timeout = 0;
     uint8_t st;
 

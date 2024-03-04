@@ -4,6 +4,11 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <kbd.h>
+
+extern int counter;
+extern bool ih_flag;
+extern uint8_t scancode[2];
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -29,7 +34,7 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-int kbd_test_scan() {
+int (kbd_test_scan)() {
   uint8_t bit_no;
 
   if (kbd_subscribe_int(&bit_no) != OK)
