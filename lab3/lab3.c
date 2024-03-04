@@ -29,11 +29,54 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-int(kbd_test_scan)() {
-  /* To be completed by the students */
-  printf("%s is not yet implemented!\n", __func__);
+int kbd_test_scan() {
+  uint8_t bit_no;
 
-  return 1;
+  if (kbd_subscribe_int(&bit_no) != OK)
+    return 1;
+
+  uint32_t irq_set = BIT(bit_no);
+
+  message msg;
+  int ipc_status;
+  int index = 0;
+
+  while (scancode[index] != ESC_BREAK) {
+    int receive_result;
+
+    if ((receive_result = driver_receive(ANY, &msg, &ipc_status)) != OK) {
+      printf("driver_receive failed with : %d", receive_result);
+      continue;
+    }
+
+    if (is_ipc_notify(ipc_status)) {
+      switch (_ENDPOINT_P(msg.m_source)) {
+        case HARDWARE: {
+          if (msg.m_notify.interrupts & irq_set) {
+            kbc_ih();
+
+            if (scancode[index] == TWO_BYTE_SC) {
+              index++;
+              continue;
+            }
+
+            kbd_print_scancode(ih_flag, (index + 1), scancode);
+            index = 0;
+          }
+          break;
+        }
+        default:
+          break;
+      }
+    }
+  }
+
+  if (kbd_unsubscribe_int() != OK)
+    return 1;
+
+  kbd_print_no_sysinb(counter);
+
+  return 0;
 }
 
 int(kbd_test_poll)() {
