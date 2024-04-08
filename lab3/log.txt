@@ -1,0 +1,91 @@
+    compile  lab3/lab3.o
+lab3.c:32:5: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+int kbd_test_scan() {
+    ^
+/usr/include/lcom/lcf.h:207:20: note: expanded from macro 'kbd_test_scan'
+    kbd_test_scan_(CTX_INFO(""))
+                   ^
+/usr/include/lcom/types.h:17:6: note: expanded from macro 'CTX_INFO'
+    (const ctx_t) { __FILE__, __LINE__, __func__, code "\0" }
+     ^
+lab3.c:32:5: error: expected ')'
+/usr/include/lcom/lcf.h:207:20: note: expanded from macro 'kbd_test_scan'
+    kbd_test_scan_(CTX_INFO(""))
+                   ^
+/usr/include/lcom/types.h:17:19: note: expanded from macro 'CTX_INFO'
+    (const ctx_t) { __FILE__, __LINE__, __func__, code "\0" }
+                  ^
+lab3.c:32:5: note: to match this '('
+/usr/include/lcom/lcf.h:207:19: note: expanded from macro 'kbd_test_scan'
+    kbd_test_scan_(CTX_INFO(""))
+                  ^
+lab3.c:32:5: error: conflicting types for 'kbd_test_scan_'
+int kbd_test_scan() {
+    ^
+/usr/include/lcom/lcf.h:207:5: note: expanded from macro 'kbd_test_scan'
+    kbd_test_scan_(CTX_INFO(""))
+    ^
+/usr/include/lcom/lcf.h:399:5: note: previous declaration is here
+int kbd_test_scan_(const ctx_t ctx);
+    ^
+lab3.c:32:5: error: parameter name omitted
+int kbd_test_scan() {
+    ^
+/usr/include/lcom/lcf.h:207:20: note: expanded from macro 'kbd_test_scan'
+    kbd_test_scan_(CTX_INFO(""))
+                   ^
+/usr/include/lcom/types.h:17:6: note: expanded from macro 'CTX_INFO'
+    (const ctx_t) { __FILE__, __LINE__, __func__, code "\0" }
+     ^
+lab3.c:35:7: error: implicit declaration of function 'kbd_subscribe_int' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+  if (kbd_subscribe_int(&bit_no) != OK)
+      ^
+lab3.c:35:7: note: did you mean 'timer_subscribe_int'?
+/usr/include/lcom/timer.h:62:5: note: 'timer_subscribe_int' declared here
+int(timer_subscribe_int)(uint8_t *bit_no);
+    ^
+lab3.c:44:10: error: use of undeclared identifier 'scancode'
+  while (scancode[index] != ESC_BREAK) {
+         ^
+lab3.c:44:29: error: use of undeclared identifier 'ESC_BREAK'
+  while (scancode[index] != ESC_BREAK) {
+                            ^
+lab3.c:58:17: error: use of undeclared identifier 'scancode'
+            if (scancode[index] == TWO_BYTE_SC) {
+                ^
+lab3.c:58:36: error: use of undeclared identifier 'TWO_BYTE_SC'
+            if (scancode[index] == TWO_BYTE_SC) {
+                                   ^
+lab3.c:63:32: error: use of undeclared identifier 'ih_flag'
+            kbd_print_scancode(ih_flag, (index + 1), scancode);
+                               ^
+/usr/include/lcom/lcf.h:219:25: note: expanded from macro 'kbd_print_scancode'
+    kbd_print_scancode_(make, size, bytes, CTX_INFO(#make "\0" #size "\0" #bytes))
+                        ^
+lab3.c:63:54: error: use of undeclared identifier 'scancode'
+            kbd_print_scancode(ih_flag, (index + 1), scancode);
+                                                     ^
+/usr/include/lcom/lcf.h:219:37: note: expanded from macro 'kbd_print_scancode'
+    kbd_print_scancode_(make, size, bytes, CTX_INFO(#make "\0" #size "\0" #bytes))
+                                    ^
+lab3.c:74:7: error: implicit declaration of function 'kbd_unsubscribe_int' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+  if (kbd_unsubscribe_int() != OK)
+      ^
+lab3.c:74:7: note: did you mean 'kbd_subscribe_int'?
+lab3.c:35:7: note: 'kbd_subscribe_int' declared here
+  if (kbd_subscribe_int(&bit_no) != OK)
+      ^
+lab3.c:77:23: error: use of undeclared identifier 'counter'
+  kbd_print_no_sysinb(counter);
+                      ^
+/usr/include/lcom/lcf.h:222:26: note: expanded from macro 'kbd_print_no_sysinb'
+    kbd_print_no_sysinb_(cnt, CTX_INFO(#cnt))
+                         ^
+lab3.c:94:2: error: no newline at end of file [-Werror,-Wnewline-eof]
+}
+ ^
+14 errors generated.
+*** Error code 1
+
+Stop.
+make: stopped in /home/lcom/labs/g5/lab3
