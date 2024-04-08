@@ -2,6 +2,13 @@
     "files.associations": {
         "*.embeddedhtml": "html",
         "stdint.h": "c",
-        "random": "c"
+        "random": "c",
+        "chrono": "c",
+        "variant": "c",
+        "utils.h": "c",
+        "i8254.h": "c",
+        "timer.h": "c",
+        "lcf.h": "c",
+        "system_error": "c"
     }
 }

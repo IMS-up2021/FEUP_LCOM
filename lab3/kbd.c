@@ -1,19 +1,19 @@
 #include "kbd.h"
 #include "utils.h"
 
-int hook_id = 1;
-int counter = 0, i = 0;
+int kbd_hook_id = 1;
+int counter_kbd = 0, i = 0;
 bool makecode;
 uint8_t scancode[2];
 
 
 int (kbd_subscribe_int)(uint8_t *bit_no) {
-    *bit_no = hook_id;
-    return sys_irqsetpolicy(KBD_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &hook_id);
+    *bit_no = kbd_hook_id;
+    return sys_irqsetpolicy(KBD_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &kbd_hook_id);
 }
 
 int (kbd_unsubscribe_int)() {
-    return sys_irqrmpolicy(&hook_id);
+    return sys_irqrmpolicy(&kbd_hook_id);
 }
 
 int check_status(uint8_t st) {
@@ -30,12 +30,12 @@ int check_status(uint8_t st) {
 }
 
 int (kbd_get_status)(uint8_t *st) {
-    counter++;
+    counter_kbd++;
     return util_sys_inb(STATUS_REG, st);
 }
 
 int (kbd_read_out_buffer)(uint8_t *output) {
-    counter++;
+    counter_kbd++;
     return util_sys_inb(OUT_BUF, output);
 }
 
@@ -60,24 +60,24 @@ int (kbd_reenable_ints)() {
 
     if (kbd_write_cmd(KBC_CMD_REG, READ_CMDB) != 0) {
         printf("Error writing command byte while reenabling interrupts\n");
-        return -1;
+        return 1;
     }
 
     if (kbd_read_ret_cmd(&output) != 0) {
         printf("Error reading return command byte\n");
-        return -1;
+        return 1;
     }
 
     output |= KBC_INT;
 
     if (kbd_write_cmd(KBC_CMD_REG, WRITE_CMDB) != 0) {
         printf("Error writing command byte while reenabling interrupts\n");
-        return -1;
+        return 1;
     }
 
     if (kbd_write_cmd(KBC_ARGS, output) != 0) {
         printf("Error writing command byte while reenabling interrupts\n");
-        return -1;
+        return 1;
     }
 
     return 0;

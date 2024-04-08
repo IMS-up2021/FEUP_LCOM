@@ -33,5 +33,7 @@
 #define KBI_CHK       0xAB          // check keyboard interface; returns 0 if OK
 #define KBI_DIS       0xAD          // disable keyboard interface
 #define KBI_ENA       0xAE          // enable keyboard interface
+#define PAR_ERR 0x80
+#define TO_ERR 0x40
 
 #endif /*_LCOM_I8042_H_*/
