@@ -102,11 +102,34 @@ int(video_test_rectangle)(uint16_t mode, uint16_t x, uint16_t y,
 }
 
 int(video_test_pattern)(uint16_t mode, uint8_t no_rectangles, uint32_t first, uint8_t step) {
-  /* To be completed */
-  printf("%s(0x%03x, %u, 0x%08x, %d): under construction\n", __func__,
-         mode, no_rectangles, first, step);
+  if (set_frame_buffer(mode) != 0) return 1;
 
-  return 1;
+  if (set_graphic_mode(mode) != 0) return 1;
+
+  int v = mode_info.YResolution / no_rectangles;
+  int h = mode_info.XResolution / no_rectangles;
+
+  for (int i = 0; i < no_rectangles; i++){
+    for(int j = 0; j < no_rectangles; j++){
+       uint32_t color;
+
+      if (mode_info.MemoryModel == DIRECT_COLOR) {
+        uint32_t R = Red(j, step, first);
+        uint32_t G = Green(i, step, first);
+        uint32_t B = Blue(j, i, step, first);
+        color = direct_mode(R, G, B);
+      }
+      else {
+        color = indexed_mode(j, i, step, first, no_rectangles);
+      }
+      if (vg_draw_rectangle(j*h, i*v, h, v, color)) return 1;
+    }
+  }
+  if (waiting_ESC_key()) return 1;
+
+  if (vg_exit() != 0) return 1;
+
+  return 0;
 }
 
 int(video_test_xpm)(xpm_map_t xpm, uint16_t x, uint16_t y) {
