@@ -1,7 +1,0 @@
-@lcflib.a:2019, lcf_start
-  video_test_rectangle(mode, x, y, width, height, color)
-> video_test_rectangle(0x000, 1, 1, 4, 6, 0x000000ff [255])
-  @lab5.c:52, video_test_rectangle
-    printf("%s(0x%03X, %u, %u, %u, %u, 0x%08x): under construction\n", __func__, mode, x, y, width, height, color)
-    "video_test_rectangle(0x000, 1, 1, 4, 6, 0x000000ff): under construction"
-< video_test_rectangle(0x000, 1, 1, 4, 6, 0x000000ff [255]) -> (ret: 1)
