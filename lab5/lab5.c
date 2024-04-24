@@ -9,6 +9,7 @@
 #include "graphic.h"
 #include "kbd.h"
 #include "utils.h"
+#include "VBE_MACROS.h"
 
 extern vbe_mode_info_t mode_info;
 extern uint8_t scancode[2];
@@ -99,7 +100,7 @@ int(video_test_rectangle)(uint16_t mode, uint16_t x, uint16_t y,
 
   return 0;
 }
-/*
+
 int(video_test_pattern)(uint16_t mode, uint8_t no_rectangles, uint32_t first, uint8_t step) {
   if (set_frame_buffer(mode) != 0) return 1;
 
@@ -130,7 +131,7 @@ int(video_test_pattern)(uint16_t mode, uint8_t no_rectangles, uint32_t first, ui
 
   return 0;
 }
-*/
+
 int(video_test_xpm)(xpm_map_t xpm, uint16_t x, uint16_t y) {
   /* To be completed */
   printf("%s(%8p, %u, %u): under construction\n", __func__, xpm, x, y);
