@@ -9,6 +9,7 @@
         "i8254.h": "c",
         "timer.h": "c",
         "lcf.h": "c",
-        "system_error": "c"
+        "system_error": "c",
+        "ranges": "c"
     }
 }
