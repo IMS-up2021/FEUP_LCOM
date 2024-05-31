@@ -24,6 +24,7 @@ typedef struct {
     const unsigned int y_pos;
     const unsigned int width;
     const unsigned int height;
+    const bool top;
 } Wall;
 
 typedef enum {
@@ -36,6 +37,6 @@ typedef union {
     Wall wall;
 } CollisionEntity;
 
-bool check_collision(Ball *ball, CollisionEntity entity, CollisionType type);
+bool check_collision(Ball *ball, CollisionEntity *entity, CollisionType type);
 
 #endif
