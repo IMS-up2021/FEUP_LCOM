@@ -25,23 +25,7 @@ void handle_kbd_instructions_event(uint8_t scan_code[2]) {
 }
 
 void handle_kbd_game_event(uint8_t scan_code[2]) {
-    if (scan_code[0] == TWO_BYTE_SC) {
-        switch (scan_code[1]) {
-            case LEFT_ARROW:
-                move_left();
-                break;
-            case RIGHT_ARROW:
-                move_right();
-                break;
-            case DOWN_ARROW:
-                piece_fall();
-                break;
-            default:
-                break;
-        }
-    } else if (scan_code[0] == SPACE) {
-        drop_piece();
-    }
+    //TODO: something
 }
 
 
