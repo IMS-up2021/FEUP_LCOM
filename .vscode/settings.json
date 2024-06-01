@@ -12,6 +12,8 @@
         "system_error": "c",
         "ranges": "c",
         "math.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "locale": "c",
+        "string": "c"
     }
 }

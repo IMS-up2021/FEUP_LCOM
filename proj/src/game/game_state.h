@@ -6,7 +6,7 @@
 typedef enum {
   PLAYING,
   MAIN_MENU,
-  GAME_OVER,
+  INSTRUCTIONS,
   LEADERBOARD,
   EXIT
 } game_state;
@@ -20,6 +20,7 @@ extern game_state state;
 
 void play();
 void leaderboard();
+void instructions();
 void update_mouse(int16_t x, int16_t y);
 
 

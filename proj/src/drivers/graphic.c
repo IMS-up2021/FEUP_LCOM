@@ -1,212 +1,215 @@
-#include "graphic.h"
 #include <lcom/lcf.h>
-#include <math.h>
 
-void *vg_init(uint16_t mode) {
-    if (set_frame_buffer(mode) != 0) {
-        printf("Error setting frame buffer\n");
-        return NULL;
-    }
-    if (set_graphic_mode(mode) != 0) {
-        printf("Error setting graphic mode\n");
-        return NULL;
-    }
-    return frame_buffer;
+#include "video.h"
+
+#include "VBE.h"
+
+static uint8_t *video_mem;       /* Process (virtual) address to which VRAM is mapped */
+static void *buffer;             /* Back buffer for double buffering */
+static void *current;            /* Current buffer for double buffering */
+
+static unsigned h_res;           /* Horizontal resolution in pixels */
+static unsigned v_res;           /* Vertical resolution in pixels */
+static unsigned bits_per_pixel;  /* Number of VRAM bits per pixel */
+static unsigned bytes_per_pixel; /* Number of VRAM bytes per pixel*/
+static unsigned vram_size;       /* VRAM's size */
+
+void *(video_init) (uint16_t mode) {
+  /* 1. Initialize static global variables */
+  if (vbe_get_mode_info(mode, &vmi_p)) {
+    printf("%s: vbe_get_mode_info(mode: 0x%x, vmi_p) error\n", __func__, mode);
+    return NULL;
+  }
+  h_res = vmi_p.XResolution;
+  v_res = vmi_p.YResolution;
+  bits_per_pixel = vmi_p.BitsPerPixel;
+  bytes_per_pixel = (bits_per_pixel + 7) / 8;
+
+  /* 2. Map VRAM to the process' address space */
+  struct minix_mem_range mr;
+  unsigned int vram_base = vmi_p.PhysBasePtr;  /* VRAM's physical address */
+  vram_size = h_res * v_res * bytes_per_pixel; /* VRAM's size */
+
+  struct minix_mem_range mr_buffer;
+  unsigned int buffer_base = vram_base + vram_size;
+
+  /* Allow memory mapping */
+  mr.mr_base = (phys_bytes) vram_base;
+  mr_buffer.mr_base = (phys_bytes) buffer_base;
+
+  mr.mr_limit = mr.mr_base + vram_size * 2;
+  if (sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr)) {
+    printf("%s: sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr) error\n", __func__);
+    return NULL;
+  }
+
+  /* Map memory */
+  video_mem = vm_map_phys(SELF, (void *) mr.mr_base, vram_size);
+  if (video_mem == MAP_FAILED) {
+    printf("%s: vm_map_phys(SELF, mr.mr_base, vram_size: %d) error\n", __func__, vram_size);
+    return NULL;
+  }
+
+  buffer = vm_map_phys(SELF, (void *) mr_buffer.mr_base, vram_size);
+  if (buffer == MAP_FAILED) {
+    printf("%s: vm_map_phys(SELF, mr_buffer.mr_base, vram_size: %d) error\n", __func__, vram_size);
+    return NULL;
+  }
+
+  memset(video_mem, 0, vram_size);
+  memset(buffer, 0, vram_size);
+
+  /* 3. Set the desired graphics mode using a linear frame buffer */
+  reg86_t r;
+
+  /* Specifiy the appropriate register values */
+  memset(&r, 0, sizeof(r)); /* zero the structure */
+  r.intno = VBE_INTNO;      /* BIOS video services */
+  r.ah = VBE_REG_AH;
+  r.al = VBE_SET_MODE;
+  r.bx = mode | VBE_SET_LINEAR_MODE;
+
+  /* Make the BIOS call */
+  if (sys_int86(&r)) {
+    printf("%s: sys_int86(&r) error\n", __func__);
+    return NULL;
+  }
+
+  current = buffer;
+
+  return video_mem;
 }
 
-int set_graphic_mode(uint16_t submode) {
-    reg86_t reg86;
-    memset(&reg86, 0, sizeof(reg86));
+int(video_swap_buffers)() {
+  /* 1. Get display start */
+  reg86_t r;
 
-    reg86.intno = 0x10;
-    reg86.ah = 0x4F;
-    reg86.al = 0x02;
-    reg86.bx = submode | BIT(14);
+  /* Specifiy the appropriate register values */
+  memset(&r, 0, sizeof(r)); /* zero the structure */
+  r.intno = VBE_INTNO;      /* BIOS video services */
+  r.ah = VBE_REG_AH;
+  r.al = VBE_SET_GET_DISPLAY_START;
+  r.bh = VBE_RESERVED;
+  r.bl = VBE_GET_DISPLAY_START;
 
-    if (sys_int86(&reg86) != 0) {
-        printf("Set graphic mode failed\n");
+  /* Make the BIOS call */
+  if (sys_int86(&r)) {
+    printf("%s: sys_int86(&r) error\n", __func__);
+    return 1;
+  }
+
+  // DX = First Displayed Scan Line
+  uint16_t dx;
+  if (r.dx == 0) {
+    dx = v_res;
+    current = video_mem;
+    memcpy(current, buffer, vram_size);
+  }
+  else if (r.dx == v_res) {
+    dx = 0;
+    current = buffer;
+    memcpy(current, video_mem, vram_size);
+  }
+  else {
+    printf("%s: DX (%d) error\n", __func__, r.dx);
+    return 1;
+  }
+
+  /* 2. Set display start */
+
+  /* Specifiy the appropriate register values */
+  memset(&r, 0, sizeof(r));
+  r.intno = VBE_INTNO;
+  r.ah = VBE_REG_AH;
+  r.al = VBE_SET_GET_DISPLAY_START;
+  r.bh = VBE_RESERVED;
+  r.bl = VBE_SET_DISPLAY_START;
+  r.cx = 0;  // CX = First Displayed Pixel In Scan Line
+  r.dx = dx; // DX = First Displayed Scan Line
+
+  /* Make the BIOS call */
+  if (sys_int86(&r)) {
+    printf("%s: sys_int86(&r) error\n", __func__);
+    return 1;
+  }
+
+  return 0;
+}
+
+rgb_8_8_8_t(video_get_colors)(uint32_t color) {
+  uint8_t r = color >> vmi_p.RedFieldPosition % BIT(vmi_p.RedMaskSize);
+  uint8_t g = color >> vmi_p.GreenFieldPosition % BIT(vmi_p.GreenMaskSize);
+  uint8_t b = color >> vmi_p.BlueFieldPosition % BIT(vmi_p.BlueMaskSize);
+  rgb_8_8_8_t colors = {r, g, b};
+  return colors;
+}
+
+uint32_t(video_get_color)(rgb_8_8_8_t colors) {
+  uint32_t color = (colors.red << vmi_p.RedFieldPosition) | (colors.green << vmi_p.GreenFieldPosition) | (colors.blue << vmi_p.BlueFieldPosition);
+  return color;
+}
+
+int(video_draw_pixel)(uint16_t x, uint16_t y, uint32_t color) {
+  if (x < 0 || x >= h_res || y < 0 || y >= v_res) {
+    printf("%s: pixel (%d, %d) error\n", __func__, x, y);
+    return 1;
+  }
+
+  uint8_t *byte = current;
+  byte += (x + y * h_res) * bytes_per_pixel;
+
+  if (!memcpy(byte, &color, bytes_per_pixel)) {
+    printf("%s: memcpy(byte: 0x%x, color: 0x%x, bytes_per_pixel: %d)\n", __func__, *byte, color, bytes_per_pixel);
+    return 1;
+  }
+
+  return 0;
+}
+
+int(video_draw_hline)(uint16_t x, uint16_t y, uint16_t len, uint32_t color) {
+  for (uint16_t i = 0; i < len; i++) {
+    if (video_draw_pixel(x + i, y, color)) {
+      printf("%s: video_draw_pixel(x + i: %d, y: %d, color: %d) error\n", __func__, x + i, y, color);
+      return 1;
+    }
+  }
+  return 0;
+}
+
+int(video_draw_rectangle)(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t color) {
+  for (uint16_t i = 0; i < height; i++) {
+    if (video_draw_hline(x, y + i, width, color)) {
+      printf("%s: video_draw_hline(x: %d, y + i: %d, width: %d, color: %d) error\n", __func__, x, y + i, width, color);
+      return 1;
+    }
+  }
+  return 0;
+}
+
+int(video_draw_pixmap)(uint16_t x, uint16_t y, xpm_image_t *image) {
+  for (uint16_t row = 0; row < image->height; row++)
+    for (uint16_t col = 0; col < image->width; col++)
+      if (video_draw_pixel(x + col, y + row, *(image->bytes + col + row * image->width))) {
+        printf("%s: video_draw_pixel(x + col: %d, y + row: %d, *(image->bytes + col + row * image->width): 0x%x) error\n", __func__, x + col, y + row, *(image->bytes + col + row * image->width));
         return 1;
-    }
-    return 0;
+      }
+  return 0;
 }
 
-int set_text_mode() {
-    reg86_t reg86;
-    memset(&reg86, 0, sizeof(reg86));
-
-    reg86.intno = 0x10;
-    reg86.ah = 0x00;
-    reg86.al = 0x03;
-
-    if (sys_int86(&reg86) != 0) {
-        printf("Set text mode failed\n");
+int(video_clean)(uint16_t xi, uint16_t yi, uint16_t xf, uint16_t yf) {
+  for (uint16_t y = yi; y < yf; y++)
+    for (uint16_t x = xi; x < xf; x++)
+      if (video_draw_pixel(x, y, 0)) {
+        printf("%s: video_draw_pixel(x: %d, y: %d, 0) error\n", __func__, x, y);
         return 1;
-    }
-    return 0;
+      }
+  return 0;
 }
 
-int set_frame_buffer(uint16_t mode) {
-    memset(&mode_info, 0, sizeof(mode_info));
-
-    if (vbe_get_mode_info(mode, &mode_info)) {
-        return 1;
-    }
-
-    unsigned int bytes_per_pixel = (mode_info.BitsPerPixel + 7) / 8;
-    unsigned int frame_size = mode_info.XResolution * mode_info.YResolution * bytes_per_pixel;
-
-    struct minix_mem_range physic_addresses;
-    physic_addresses.mr_base = mode_info.PhysBasePtr;
-    physic_addresses.mr_limit = physic_addresses.mr_base + frame_size;
-
-    center_x = mode_info.XResolution / 2;
-    center_y = mode_info.YResolution / 2;
-
-    if (sys_privctl(SELF, SYS_PRIV_ADD_MEM, &physic_addresses)) {
-        printf("Physical memory allocation error\n");
-        return 1;
-    }
-
-    frame_buffer = vm_map_phys(SELF, (void *) physic_addresses.mr_base, frame_size);
-    second_buffer = malloc(frame_size);
-
-    if (frame_buffer == NULL) {
-        printf("Virtual memory allocation error\n");
-        return 1;
-    }
-
-    return 0;
-}
-
-int print_xpm(xpm_image_t img, uint16_t x, uint16_t y) {
-    if (y + img.height > mode_info.YResolution) {
-        y = mode_info.YResolution - img.height;
-    }
-    if (x + img.width > mode_info.XResolution) {
-        x = mode_info.XResolution - img.width;
-    }
-
-    uint64_t count = 0;
-    uint16_t initial_x = x;
-
-    for (int h = 0; h < img.height; h++) {
-        for (int w = 0; w < img.width; w++) {
-            uint64_t offset = ((y * mode_info.XResolution) + x) * (mode_info.BytesPerScanLine / mode_info.XResolution);
-            void *address = (void *) ((char *) second_buffer + offset);
-
-            uint8_t bytes_per_pixel = img.size / (img.height * img.width);
-            uint32_t color = 0;
-
-            for (size_t i = 0; i < 3; i++) {
-                color |= *(img.bytes + (count * bytes_per_pixel) + i) << (i * 8);
-            }
-
-            if (color == 0x00b140) {  // Transparent color
-                count++;
-                x++;
-                continue;
-            }
-
-            memcpy(address, img.bytes + (count * bytes_per_pixel), mode_info.BytesPerScanLine / mode_info.XResolution);
-            x++;
-            count++;
-        }
-        y++;
-        x = initial_x;
-    }
-    return 0;
-}
-
-void copy_buffer() {
-    memcpy(frame_buffer, second_buffer, mode_info.XResolution * mode_info.YResolution * (mode_info.BytesPerScanLine / mode_info.XResolution));
-}
-
-void draw_board(xpm_image_t board) {
-    uint8_t block_side = (mode_info.YResolution - 30) / 16;
-    uint8_t x = center_x - (block_side * 5) - 10;
-    print_xpm(board, x, 10);
-}
-
-void draw_board_block(xpm_image_t img, uint8_t x, uint8_t y) {
-    print_xpm(img, (img.width * x) + (center_x - 5 * img.width), ((mode_info.YResolution - 55) - (y * img.height)));
-}
-
-void draw_char(xpm_image_t font, uint16_t x, uint16_t y, uint8_t scale, uint8_t *pos) {
-    uint16_t initial_x = x;
-
-    for (int i = 0; i < 7; i++) {
-        for (int k = 0; k < scale; k++) {
-            for (int j = 0; j < 6; j++) {
-                for (int l = 0; l < scale; l++) {
-                    uint64_t offset = ((y * mode_info.XResolution) + x) * (mode_info.BytesPerScanLine / mode_info.XResolution);
-                    void *addr = (void *) ((char *) second_buffer + offset);
-
-                    uint8_t bytes_per_pixel = font.size / (font.height * font.width);
-                    uint32_t color = 0;
-
-                    for (size_t off = 0; off < 3; off++) {
-                        color |= *(pos + (j + i * font.width) * bytes_per_pixel + off) << (off * 8);
-                    }
-
-                    if (color == 0x00b140) {  // Transparent color
-                        x++;
-                        continue;
-                    }
-
-                    memcpy(addr, pos + ((i * font.width) + j) * bytes_per_pixel, mode_info.BytesPerScanLine / mode_info.XResolution);
-                    x++;
-                }
-            }
-            y++;
-            x = initial_x;
-        }
-    }
-}
-
-int draw_score_background(xpm_image_t square) {
-    uint16_t x = mode_info.XResolution - square.width - 50;
-    uint16_t y = 10;
-    print_xpm(square, x, y);
-    return x;
-}
-
-int normalize_color(uint32_t color, uint32_t *new_color) {
-    if (mode_info.BitsPerPixel == 32) {
-        *new_color = color;
-    } else {
-        *new_color = color & (BIT(mode_info.BitsPerPixel) - 1);
-    }
-    return 0;
-}
-
-uint32_t direct_mode(uint32_t r, uint32_t g, uint32_t b) {
-    return (r << mode_info.RedFieldPosition) | (g << mode_info.GreenFieldPosition) | (b << mode_info.BlueFieldPosition);
-}
-
-uint32_t indexed_mode(uint16_t col, uint16_t row, uint8_t step, uint32_t first, uint8_t n) {
-    return (first + (row * n + col) * step) % (1 << mode_info.BitsPerPixel);
-}
-
-uint32_t Red(unsigned j, uint8_t step, uint32_t first) {
-    return (r(first) + j * step) % (1 << mode_info.RedMaskSize);
-}
-
-uint32_t Green(unsigned i, uint8_t step, uint32_t first) {
-    return (g(first) + i * step) % (1 << mode_info.GreenMaskSize);
-}
-
-uint32_t Blue(unsigned j, unsigned i, uint8_t step, uint32_t first) {
-    return (b(first) + (i + j) * step) % (1 << mode_info.BlueMaskSize);
-}
-
-uint32_t r(uint32_t first) {
-    return ((1 << mode_info.RedMaskSize) - 1) & (first >> mode_info.RedFieldPosition);
-}
-
-uint32_t g(uint32_t first) {
-    return ((1 << mode_info.GreenMaskSize) - 1) & (first >> mode_info.GreenFieldPosition);
-}
-
-uint32_t b(uint32_t first) {
-    return ((1 << mode_info.BlueMaskSize) - 1) & (first >> mode_info.BlueFieldPosition);
+int video_draw_background(uint32_t color) {
+  if (video_draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, color)) {
+    printf("%s: video_draw_rectangle(0, 0, vmi_p.XResolution: %d, vmi_p.YResolution: %d, color: 0x%x) error\n", __func__, vmi_p.XResolution, vmi_p.YResolution, color);
+    return 1;
+  }
+  return 0;
 }
