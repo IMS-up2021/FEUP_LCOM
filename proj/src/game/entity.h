@@ -4,11 +4,11 @@
 #include <stdbool.h>
 
 typedef struct {
-    const unsigned char number;
     const unsigned int x_pos;
     unsigned int y_pos;
     unsigned int width;
     unsigned int height;
+    const unsigned char number;
 } Player;
 
 typedef struct {
@@ -37,6 +37,6 @@ typedef union {
     Wall wall;
 } CollisionEntity;
 
-bool check_collision(Ball *ball, CollisionEntity *entity, CollisionType type);
+bool collision_handler(Ball *ball, CollisionEntity *entity, CollisionType type);
 
 #endif

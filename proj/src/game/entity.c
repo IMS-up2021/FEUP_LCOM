@@ -1,7 +1,8 @@
 #include "entity.h"
 
+#define PI (3.14159265359)
 
-bool check_collision(Ball *ball, CollisionEntity *entity, CollisionType type) {
+bool collision_handler(Ball *ball, CollisionEntity *entity, CollisionType type) {
     unsigned int ball_critical;
     bool x_alignment, y_alignment;
 
@@ -26,5 +27,9 @@ bool check_collision(Ball *ball, CollisionEntity *entity, CollisionType type) {
             break;
     }
 
-    return x_alignment && y_alignment;
+    if (!x_alignment || !y_alignment) return false;
+
+    ball->angle = PI - ball->angle + (ball->angle < 0.0f ? 2 * PI : 0.0f);
+    return true;
+
 }

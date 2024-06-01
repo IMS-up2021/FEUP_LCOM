@@ -10,6 +10,8 @@
         "timer.h": "c",
         "lcf.h": "c",
         "system_error": "c",
-        "ranges": "c"
+        "ranges": "c",
+        "math.h": "c",
+        "stdio.h": "c"
     }
 }
