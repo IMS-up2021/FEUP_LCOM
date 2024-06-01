@@ -36,37 +36,9 @@
 
 /* Keys */
 #define DOWN_ARROW    0x50
-#define LEFT_ARROW    0x4b
-#define RIGHT_ARROW   0x4d
+#define UP_ARROW      0x48
 
 #define ENTER         0x1c
 #define SPACE         0x39
-
-#define A_T            0x1e
-#define B_T             0x30
-#define C_T             0x2e
-#define D_T             0x20
-#define E_T             0x12
-#define F_T             0x21
-#define G_T             0x22
-#define H_T             0x23
-#define I_T             0x17
-#define J_T             0x24
-#define K_T             0x25
-#define L_T             0x26
-#define M_T             0x32
-#define N_T             0x31
-#define O_T             0x18
-#define P_T             0x19
-#define Q_T             0x10
-#define R_T             0x13
-#define S_T             0x1f
-#define T_T             0x14
-#define U_T             0x16
-#define V_T             0x2f
-#define W_T             0x11
-#define X_T             0x2d
-#define Y_T             0x15
-#define Z_T             0x2c
 
 #endif /*_LCOM_I8042_KBD_H_*/
