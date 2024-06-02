@@ -2,6 +2,8 @@
 #define _DRAW_H_
 
 #include "entity.h"
+#include "ui.h"
+
 /** @defgroup ball_view ball_view
  * @{
  *
@@ -46,7 +48,7 @@ int draw_game();
  */
 int draw_menu();
 
-**
+/**
  * @brief Sprite drawer
  *
  * @param sprite pointer to the sprite to be drawn

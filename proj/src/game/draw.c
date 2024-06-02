@@ -1,6 +1,22 @@
+#include <lcom/lcf.h>
+#include <math.h>
+
 #include "draw.h"
 #include "game_state.h"
-#include <lcom/lcf.h>
+#include "ui.h"
+
+
+#include "../xpm/0.xpm"
+#include "../xpm/1.xpm"
+#include "../xpm/2.xpm"
+#include "../xpm/3.xpm"
+#include "../xpm/4.xpm"
+#include "../xpm/5.xpm"
+#include "../xpm/6.xpm"
+#include "../xpm/7.xpm"
+#include "../xpm/8.xpm"
+#include "../xpm/9.xpm"
+
 
 extern Ball *ball;
 extern Wall *wall;
@@ -10,16 +26,7 @@ extern Button *play;
 extern Button *quit;
 extern Cursor *cursor_menu;
 
-extern Sprite *zero;
-extern Sprite *one;
-extern Sprite *two;
-extern Sprite *three;
-extern Sprite *four;
-extern Sprite *five;
-extern Sprite *six;
-extern Sprite *seven;
-extern Sprite *eight;
-extern Sprite *nine;
+Digit digits[10];
 
 game_state state;
 
@@ -29,6 +36,33 @@ extern uint16_t y_max;
 #define WIDTH_NUMBER 20
 #define COLOR_BACKGROUND 0x000000
 #define WALL_COLOR 0xFFFFFF
+
+bool init_digits(void) {
+  xpm_image_t image;
+  
+  digits[0].sprite = xpm_load((xpm_map_t)0_xpm, XPM_INDEXED, &image);
+  digits[0].width = image.width; digits[0].height = image.height;
+  digits[1].sprite = xpm_load((xpm_map_t)1_xpm, XPM_INDEXED, &image);
+  digits[1].width = image.width; digits[1].height = image.height;
+  digits[2].sprite = xpm_load((xpm_map_t)2_xpm, XPM_INDEXED, &image);
+  digits[2].width = image.width; digits[2].height = image.height;
+  digits[3].sprite = xpm_load((xpm_map_t)3_xpm, XPM_INDEXED, &image);
+  digits[3].width = image.width; digits[3].height = image.height;
+  digits[4].sprite = xpm_load((xpm_map_t)4_xpm, XPM_INDEXED, &image);
+  digits[4].width = image.width; digits[4].height = image.height;
+  digits[5].sprite = xpm_load((xpm_map_t)5_xpm, XPM_INDEXED, &image);
+  digits[5].width = image.width; digits[5].height = image.height;
+  digits[6].sprite = xpm_load((xpm_map_t)6_xpm, XPM_INDEXED, &image);
+  digits[6].width = image.width; digits[6].height = image.height;
+  digits[7].sprite = xpm_load((xpm_map_t)7_xpm, XPM_INDEXED, &image);
+  digits[7].width = image.width; digits[7].height = image.height;
+  digits[8].sprite = xpm_load((xpm_map_t)8_xpm, XPM_INDEXED, &image);
+  digits[8].width = image.width; digits[8].height = image.height;
+  digits[9].sprite = xpm_load((xpm_map_t)9_xpm, XPM_INDEXED, &image);
+  digits[9].width = image.width; digits[9].height = image.height;
+  
+  return true;
+}
 
 int draw_ball(Ball *ball) {
   if (!ball) {
@@ -137,69 +171,25 @@ int draw_sprite(Sprite *sprite, uint16_t x, uint16_t y) {
   return 0;
 }
 
-int draw_digit(uint8_t digit, uint16_t x, uint16_t y) {
-  switch (digit) {
-    case 0:
-      if (draw_sprite(zero, x, y)) {
-        printf("%s: draw_sprite(zero, x: %d, y: %d) error\n", __func__, x, y);
+bool draw_digit(Digit *digit, uint16_t x, uint16_t y) {
+  for (uint16_t h = 0; h < digit->height; h++) {
+    for (uint16_t w = 0; w < digit->width; w++) {
+      if (video_draw_pixel(x + w, y + h, digit->sprite[w + h * digit->width])) {
+        printf("%s: video_draw_pixel(x + w: %d, y + h: %d, color: 0x%x) error\n", __func__, x + w, y + h, digit->sprite[w + h * digit->width]);
         return 1;
       }
-      break;
-    case 1:
-      if (draw_sprite(one, x, y)) {
-        printf("%s: draw_sprite(one, x: %d, y: %d) error\n", __func__, x, y);
-        return 1;
-      }
-      break;
-    case 2:
-      if (draw_sprite(two, x, y)) {
-        printf("%s: draw_sprite(two, x: %d, y: %d) error\n", __func__, x, y);
-        return 1;
-      }
-      break;
-    case 3:
-      if (draw_sprite(three, x, y)) {
-        printf("%s: draw_sprite(three, x: %d, y: %d) error\n", __func__, x, y);
-        return 1;
-      }
-      break;
-    case 4:
-      if (draw_sprite(four, x, y)) {
-        printf("%s: draw_sprite(four, x: %d, y: %d) error\n", __func__, x, y);
-        return 1;
-      }
-      break;
-    case 5:
-      if (draw_sprite(five, x, y)) {
-        printf("%s: draw_sprite(five, x: %d, y: %d) error\n", __func__, x, y);
-        return 1;
-      }
-      break;
-    case 6:
-      if (draw_sprite(six, x, y)) {
-        printf("%s: draw_sprite(six, x: %d, y: %d) error\n", __func__, x, y);
-        return 1;
-      }
-      break;
-    case 7:
-      if (draw_sprite(seven, x, y)) {
-        printf("%s: draw_sprite(seven, x: %d, y: %d) error\n", __func__, x, y);
-        return 1;
-      }
-      break;
-    case 8:
-      if (draw_sprite(eight, x, y)) {
-        printf("%s: draw_sprite(eight, x: %d, y: %d) error\n", __func__, x, y);
-        return 1;
-      }
-      break;
-    case 9:
-      if (draw_sprite(nine, x, y)) {
-        printf("%s: draw_sprite(nine, x: %d, y: %d) error\n", __func__, x, y);
-        return 1;
-      }
-      break;
+    }
   }
+
+  return 0;
+}
+
+int draw_number(uint8_t number, uint16_t x, uint16_t y) {
+  for (uint8_t digit = number; digit > 0; digit /= 10) {
+    draw_digit(&digits[digit % 10], x, y);
+    x += digits[digit % 10].width;
+  }
+
   return 0;
 }
 
