@@ -120,7 +120,7 @@ int(video_clean)(uint16_t xi, uint16_t yi, uint16_t xf, uint16_t yf);
  * @param color color to set the background
  * @return Return 0 upon success and non-zero otherwise
  */
-int video_draw_background(uint32_t color);
+int video_draw_background(uint8_t *background);
 
 /**@}*/
 

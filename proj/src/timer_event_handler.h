@@ -8,5 +8,4 @@
 void handle_timer_event();
 void handle_menu();
 void handle_game();
-void handle_leaderboard();
 void handle_instructions();

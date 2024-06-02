@@ -15,11 +15,15 @@ extern Cursor *cursor_menu;
 extern uint16_t x_max;
 extern uint16_t y_max;
 
+extern uint8_t *background;
+
 
 bool init_digits(void);
+bool init_buttons(void);
+bool init_cursor(void);
 
 /** @defgroup ball_view ball_view
- * @{
+ * @
  *
  * Functions related to the view of the ball
  */

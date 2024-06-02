@@ -10,13 +10,10 @@ void handle_timer_event(int game_state) {
     case PLAYING:
       handle_game();
       break;
-      
-    case LEADERBOARD:
-      handle_leaderboard();
-      break;
 
     case INSTRUCTIONS:
       handle_instructions();
+      break;
       
     case EXIT:
       break;
@@ -24,24 +21,13 @@ void handle_timer_event(int game_state) {
 }
 
 void handle_menu() {
-  //erase_mouse();
   //draw_title_screen();
-  //draw_mouse();
 }
 
 void handle_game() {
   //draw_board();
-  //draw_current_score();
-}
-
-void handle_leaderboard() {
-  //erase_mouse();
-  //leaderboard();
-  //draw_mouse();
 }
 
 void handle_instructions() {
-  //erase_mouse();
-  //draw_instructions();
-  //draw_mouse();
+  // draw_instructions();
 }

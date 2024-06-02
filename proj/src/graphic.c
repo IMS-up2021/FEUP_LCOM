@@ -206,10 +206,7 @@ int(video_clean)(uint16_t xi, uint16_t yi, uint16_t xf, uint16_t yf) {
   return 0;
 }
 
-int (video_draw_background)(uint32_t color) {
-  if (video_draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, color)) {
-    printf("%s: video_draw_rectangle(0, 0, mode_info.XResolution: %d, mode_info.YResolution: %d, color: 0x%x) error\n", __func__, mode_info.XResolution, mode_info.YResolution, color);
-    return 1;
-  }
+int (video_draw_background)(uint8_t *background) {
+  memcpy(current, background, vram_size);
   return 0;
 }

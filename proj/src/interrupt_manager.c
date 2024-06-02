@@ -57,6 +57,8 @@ int (init)() {
     }
 
     init_digits();
+    init_buttons();
+    init_cursor();
 
     // if (load_xpms() != OK) {
     //     printf("Failed to load XPMs\n");
@@ -72,15 +74,12 @@ int (init)() {
 }
 
 int(main_loop)() {
-
-    draw_number(1024, 400, 300);
-    video_swap_buffers();
-
-
     message msg;
     int ipc_status, r;
 
     while (state != EXIT) {
+
+
         if ((r = driver_receive(ANY, &msg, &ipc_status)) != OK) {
             printf("driver_receive failed with: %d\n", r);
             continue;
@@ -124,8 +123,12 @@ int(main_loop)() {
             }
         }
 
-        sleep(2);
-        state = EXIT;
+        video_draw_background(background);
+        draw_button(play_button);
+        draw_button(quit);
+        draw_cursor(cursor_menu);
+        video_swap_buffers();
+
     }
 
     return EXIT_SUCCESS;
@@ -144,7 +147,6 @@ int(leave)() {
     if (mouse_disable_data_reporting() != OK) {
         printf("Failed to disable mouse data reporting\n");
     }
-    // free_array(&scores);
     vg_exit();
 
     return EXIT_SUCCESS;
