@@ -23,7 +23,6 @@ void handle_kbd_instructions_event(uint8_t scan_code[2]) {
         state = MAIN_MENU;
     }
 }
-
 /*
 void handle_kbd_game_event(uint8_t scan_code[2]) {
     bool two_byte = (scan_code[0] == TWO_BYTE_SC);
@@ -31,7 +30,6 @@ void handle_kbd_game_event(uint8_t scan_code[2]) {
 
     if (two_byte) {
         switch (key_code) {
-            case UP_ARROW:
                 //move_up();
                 //break;
             case DOWN_ARROW:
@@ -42,7 +40,6 @@ void handle_kbd_game_event(uint8_t scan_code[2]) {
     } else if ()
 }
 */
-
 
 void handle_kbd_leaderboard_event(uint8_t scan_code[2]) {
     if (scan_code[0] == ESC_BREAK) {
