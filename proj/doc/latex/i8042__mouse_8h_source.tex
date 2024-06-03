@@ -1,0 +1,53 @@
+\doxysection{i8042\+\_\+mouse.\+h}
+\hypertarget{i8042__mouse_8h_source}{}\label{i8042__mouse_8h_source}\index{C:/Users/USER/Downloads/lcom/proj/src/i8042\_mouse.h@{C:/Users/USER/Downloads/lcom/proj/src/i8042\_mouse.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <lcom/lcf.h>}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{comment}{/*\ I/O\ Ports\ */}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#define\ OUT\_BUF\ \ \ \ \ \ \ 0x60\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ output\ buffer\ port}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#define\ STATUS\_REG\ \ \ \ 0x64\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ status\ register\ port}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ MOUSE\_ARGS\ \ \ \ 0x60\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ same\ as\ output\ buffer,\ but\ used\ for\ sending\ command\ arguments}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#define\ MOUSE\_CMD\_REG\ 0x64\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ same\ as\ status\ register,\ but\ used\ for\ issuing\ commands}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{/*\ Bit\ masks\ */}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ PARITY\ \ \ \ \ \ \ \ BIT(7)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask\ to\ check\ for\ parity\ error}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ TIME\_OUT\ \ \ \ \ \ BIT(6)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask\ to\ check\ for\ timeout\ error}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ AUX\ \ \ \ \ \ \ \ \ \ \ BIT(5)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask,\ 1\ if\ mouse\ data,\ 0\ if\ keyboard\ data}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ IBF\ \ \ \ \ \ \ \ \ \ \ BIT(1)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask\ to\ check\ if\ input\ buffer\ is\ full}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ OBF\ \ \ \ \ \ \ \ \ \ \ BIT(0)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask\ to\ check\ if\ output\ buffer\ is\ full}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ DIS2\ \ \ \ \ \ \ \ \ \ BIT(5)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ set\ to\ 1\ for\ disabling\ mouse\ in\ command\ byte}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ DIS1\ \ \ \ \ \ \ \ \ \ BIT(4)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ set\ to\ 1\ for\ disabling\ kbd\ in\ command\ byte}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ INT2\ \ \ \ \ \ \ \ \ \ BIT(1)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ set\ to\ 1\ to\ enable\ OBF\ interrupts\ from\ mouse}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ INT1\ \ \ \ \ \ \ \ \ \ BIT(0)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ set\ to\ 1\ to\ enable\ OBF\ interrupts\ from\ kbd}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ FIRST\_BYTE\ \ \ \ BIT(3)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask\ to\ check\ if\ we\ are\ receiving\ a\ packet's\ first\ byte}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/*\ Constants\ */}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ MOUSE\_OK\ \ \ \ \ \ 0xFA\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ signals\ a\ mouse\ command\ had\ no\ issues}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ MOUSE\_NACK\ \ \ \ 0xFE\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ signals\ invalid\ byte}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ MOUSE\_ERR\ \ \ \ \ 0xFC\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ signals\ second\ consecutive\ invalid\ byte}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{comment}{/*\ KBC\ Commands\ */}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ READ\_CMDB\ \ \ \ \ 0x20\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ read\ command\ byte}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ WRITE\_CMDB\ \ \ \ 0x60\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ write\ command\ byte}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ MOUSE\_DIS\ \ \ \ \ 0xA7\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ disable\ mouse}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ MOUSE\_ENBL\ \ \ \ 0xA8\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ enable\ mouse}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ CHK\_MOUSE\ \ \ \ \ 0xA9\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ check\ mouse\ interface}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ WRITE\_AUX\ \ \ \ \ 0xD4\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ write\ byte\ to\ mouse}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{/*\ Mouse\ Commands\ */}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ MOUSE\_RESET\ \ \ 0xFF\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ resets\ the\ mouse}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ MOUSE\_RESEND\ \ 0xFE\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ resend\ byte\ (used\ for\ communication\ errors)}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ MOUSE\_DEFAULT\ 0xF6\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ set\ default\ mouse\ settings}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ DIS\_DATA\_REP\ \ 0xF5\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ disables\ mouse\ data\ reporting}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ ENBL\_DATA\_REP\ 0xF4\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ enables\ mouse\ data\ reporting}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ SET\_SAMPLE\ \ \ \ 0xF3\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ set\ sample\ rate}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ SET\_REMOTE\ \ \ \ 0xF0\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ set\ mouse\ to\ remote\ mode}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#define\ READ\_DATA\ \ \ \ \ 0xEB\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ request\ a\ packet\ from\ the\ mouse\ (remote\ mode\ only)}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ SET\_STREAM\ \ \ \ 0xEA\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ set\ mouse\ to\ stream\ mode}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ MOUSE\_CFG\ \ \ \ \ 0xE9\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ get\ mouse\ configuration}}
+\DoxyCodeLine{00047\ }
+
+\end{DoxyCode}

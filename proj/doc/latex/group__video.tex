@@ -1,0 +1,229 @@
+\doxysection{video}
+\hypertarget{group__video}{}\label{group__video}\index{video@{video}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structrgb__8__8__8__t}{rgb\+\_\+8\+\_\+8\+\_\+8\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Struct for RGB color components. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{group__video_ga7c9f8f13c9ef9722e457bced9a38368a}{video\+\_\+swap\+\_\+buffers}} ()
+\begin{DoxyCompactList}\small\item\em Swaps the buffers (front buffer and back buffer) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structrgb__8__8__8__t}{rgb\+\_\+8\+\_\+8\+\_\+8\+\_\+t}} \mbox{\hyperlink{group__video_ga2599db574d74ecb6bca8ee11fe913335}{video\+\_\+get\+\_\+colors}} (uint32\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Returns the RGB color components of a color. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{group__video_gafa5c65c944e8e3413bd5598c82f5c83a}{video\+\_\+get\+\_\+color}} (\mbox{\hyperlink{structrgb__8__8__8__t}{rgb\+\_\+8\+\_\+8\+\_\+8\+\_\+t}} colors)
+\begin{DoxyCompactList}\small\item\em Returns the color enconding of RGB color components. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{group__video_gab4aec56dce587e9490b392f96f1592b2}{video\+\_\+draw\+\_\+pixel}} (uint16\+\_\+t x, uint16\+\_\+t y, uint32\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Draws (paints) a pixel by changing the video RAM. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{group__video_gaf244fd547ec570d4845bdd8fa56dfc3a}{video\+\_\+draw\+\_\+hline}} (uint16\+\_\+t x, uint16\+\_\+t y, uint16\+\_\+t len, uint32\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Draws a horizontal line by changing the video RAM. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{group__video_gad5ac1bdbd4afc4adfedb5330480f6243}{video\+\_\+draw\+\_\+rectangle}} (uint16\+\_\+t x, uint16\+\_\+t y, uint16\+\_\+t width, uint16\+\_\+t height, uint32\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Draws a filled rectangle by changing the video RAM. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{group__video_gafb146a1228a170418116745e5173e972}{video\+\_\+draw\+\_\+pixmap}} (uint16\+\_\+t x, uint16\+\_\+t y, xpm\+\_\+image\+\_\+t \texorpdfstring{$\ast$}{*}image)
+\begin{DoxyCompactList}\small\item\em Draws a Pixmap on the screen at specified coordinates. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{group__video_gaa5680f6effb6db454cf906f8b0cc9f6e}{video\+\_\+clean}} (uint16\+\_\+t xi, uint16\+\_\+t yi, uint16\+\_\+t xf, uint16\+\_\+t yf)
+\begin{DoxyCompactList}\small\item\em Resets the color of the screen pixels inside the specified area. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{group__video_ga3a35dd788e8718d12f7be6bd3ef58a6a}{video\+\_\+draw\+\_\+background}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}background)
+\begin{DoxyCompactList}\small\item\em Draws (paints) all pixels of the buffer -\/ the background. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Functions for using the video card in graphics mode 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{group__video_gaa5680f6effb6db454cf906f8b0cc9f6e}\label{group__video_gaa5680f6effb6db454cf906f8b0cc9f6e} 
+\index{video@{video}!video\_clean@{video\_clean}}
+\index{video\_clean@{video\_clean}!video@{video}}
+\doxysubsubsection{\texorpdfstring{video\_clean()}{video\_clean()}}
+{\footnotesize\ttfamily int video\+\_\+clean (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{xi,  }\item[{uint16\+\_\+t}]{yi,  }\item[{uint16\+\_\+t}]{xf,  }\item[{uint16\+\_\+t}]{yf }\end{DoxyParamCaption})}
+
+
+
+Resets the color of the screen pixels inside the specified area. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em xi} & x-\/coordinates of the upper-\/left corner \\
+\hline
+{\em yi} & y-\/coordinates of the upper-\/left corner \\
+\hline
+{\em xf} & x-\/coordinates of the bottom-\/right corner \\
+\hline
+{\em yf} & y-\/coordinates of the bottom-\/right corner \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+\Hypertarget{group__video_ga3a35dd788e8718d12f7be6bd3ef58a6a}\label{group__video_ga3a35dd788e8718d12f7be6bd3ef58a6a} 
+\index{video@{video}!video\_draw\_background@{video\_draw\_background}}
+\index{video\_draw\_background@{video\_draw\_background}!video@{video}}
+\doxysubsubsection{\texorpdfstring{video\_draw\_background()}{video\_draw\_background()}}
+{\footnotesize\ttfamily int video\+\_\+draw\+\_\+background (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{background }\end{DoxyParamCaption})}
+
+
+
+Draws (paints) all pixels of the buffer -\/ the background. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em color} & color to set the background \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+\Hypertarget{group__video_gaf244fd547ec570d4845bdd8fa56dfc3a}\label{group__video_gaf244fd547ec570d4845bdd8fa56dfc3a} 
+\index{video@{video}!video\_draw\_hline@{video\_draw\_hline}}
+\index{video\_draw\_hline@{video\_draw\_hline}!video@{video}}
+\doxysubsubsection{\texorpdfstring{video\_draw\_hline()}{video\_draw\_hline()}}
+{\footnotesize\ttfamily int video\+\_\+draw\+\_\+hline (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y,  }\item[{uint16\+\_\+t}]{len,  }\item[{uint32\+\_\+t}]{color }\end{DoxyParamCaption})}
+
+
+
+Draws a horizontal line by changing the video RAM. 
+
+Draws a horizontal line with the specified length and color, starting at the specified coordinates.
+
+The x coordinates start at 0 and increase from left to right. The y coordinates start at 0 and increase from top to bottom.
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & horizontal coordinate of the initial point \\
+\hline
+{\em y} & vertical coordinate of the initial point \\
+\hline
+{\em len} & line\textquotesingle{}s length in pixels \\
+\hline
+{\em color} & color to set the pixel \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 on success and non-\/zero otherwise 
+\end{DoxyReturn}
+\Hypertarget{group__video_gab4aec56dce587e9490b392f96f1592b2}\label{group__video_gab4aec56dce587e9490b392f96f1592b2} 
+\index{video@{video}!video\_draw\_pixel@{video\_draw\_pixel}}
+\index{video\_draw\_pixel@{video\_draw\_pixel}!video@{video}}
+\doxysubsubsection{\texorpdfstring{video\_draw\_pixel()}{video\_draw\_pixel()}}
+{\footnotesize\ttfamily int video\+\_\+draw\+\_\+pixel (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y,  }\item[{uint32\+\_\+t}]{color }\end{DoxyParamCaption})}
+
+
+
+Draws (paints) a pixel by changing the video RAM. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & horizontal coordinate of the pixel \\
+\hline
+{\em y} & vertical coordinate of the pixel \\
+\hline
+{\em color} & color to set the pixel \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+\Hypertarget{group__video_gafb146a1228a170418116745e5173e972}\label{group__video_gafb146a1228a170418116745e5173e972} 
+\index{video@{video}!video\_draw\_pixmap@{video\_draw\_pixmap}}
+\index{video\_draw\_pixmap@{video\_draw\_pixmap}!video@{video}}
+\doxysubsubsection{\texorpdfstring{video\_draw\_pixmap()}{video\_draw\_pixmap()}}
+{\footnotesize\ttfamily int video\+\_\+draw\+\_\+pixmap (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y,  }\item[{xpm\+\_\+image\+\_\+t \texorpdfstring{$\ast$}{*}}]{image }\end{DoxyParamCaption})}
+
+
+
+Draws a Pixmap on the screen at specified coordinates. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & horizontal coordinate of upper-\/left corner, starts at 0 (leftmost pixel) \\
+\hline
+{\em y} & vertical coordinate of upper-\/left corner, starts at 0 (top pixel) \\
+\hline
+{\em image} & address of the image to draw \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+\Hypertarget{group__video_gad5ac1bdbd4afc4adfedb5330480f6243}\label{group__video_gad5ac1bdbd4afc4adfedb5330480f6243} 
+\index{video@{video}!video\_draw\_rectangle@{video\_draw\_rectangle}}
+\index{video\_draw\_rectangle@{video\_draw\_rectangle}!video@{video}}
+\doxysubsubsection{\texorpdfstring{video\_draw\_rectangle()}{video\_draw\_rectangle()}}
+{\footnotesize\ttfamily int video\+\_\+draw\+\_\+rectangle (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y,  }\item[{uint16\+\_\+t}]{width,  }\item[{uint16\+\_\+t}]{height,  }\item[{uint32\+\_\+t}]{color }\end{DoxyParamCaption})}
+
+
+
+Draws a filled rectangle by changing the video RAM. 
+
+Draws a filled rectangle with the specified width, height and color starting at the specified coordinates.
+
+The x coordinates start at 0 and increase from left to right. The y coordinates start at 0 and increase from top to bottom.
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & horizontal coordinate of the rectangle\textquotesingle{}s top-\/left vertex \\
+\hline
+{\em y} & vertical coordinate of the rectangle\textquotesingle{}s top-\/left vertex \\
+\hline
+{\em width} & rectangle\textquotesingle{}s width in pixels \\
+\hline
+{\em height} & rectangle\textquotesingle{}s height in pixels \\
+\hline
+{\em color} & color to set the pixel \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 on success and non-\/zero otherwise 
+\end{DoxyReturn}
+\Hypertarget{group__video_gafa5c65c944e8e3413bd5598c82f5c83a}\label{group__video_gafa5c65c944e8e3413bd5598c82f5c83a} 
+\index{video@{video}!video\_get\_color@{video\_get\_color}}
+\index{video\_get\_color@{video\_get\_color}!video@{video}}
+\doxysubsubsection{\texorpdfstring{video\_get\_color()}{video\_get\_color()}}
+{\footnotesize\ttfamily uint32\+\_\+t video\+\_\+get\+\_\+color (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structrgb__8__8__8__t}{rgb\+\_\+8\+\_\+8\+\_\+8\+\_\+t}}}]{colors }\end{DoxyParamCaption})}
+
+
+
+Returns the color enconding of RGB color components. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em colors} & RGB color components to encode \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Color enconding of the RGB color components 
+\end{DoxyReturn}
+\Hypertarget{group__video_ga2599db574d74ecb6bca8ee11fe913335}\label{group__video_ga2599db574d74ecb6bca8ee11fe913335} 
+\index{video@{video}!video\_get\_colors@{video\_get\_colors}}
+\index{video\_get\_colors@{video\_get\_colors}!video@{video}}
+\doxysubsubsection{\texorpdfstring{video\_get\_colors()}{video\_get\_colors()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structrgb__8__8__8__t}{rgb\+\_\+8\+\_\+8\+\_\+8\+\_\+t}} video\+\_\+get\+\_\+colors (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{color }\end{DoxyParamCaption})}
+
+
+
+Returns the RGB color components of a color. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em color} & color to convert to RGB \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+RGB color components of the color 
+\end{DoxyReturn}
+\Hypertarget{group__video_ga7c9f8f13c9ef9722e457bced9a38368a}\label{group__video_ga7c9f8f13c9ef9722e457bced9a38368a} 
+\index{video@{video}!video\_swap\_buffers@{video\_swap\_buffers}}
+\index{video\_swap\_buffers@{video\_swap\_buffers}!video@{video}}
+\doxysubsubsection{\texorpdfstring{video\_swap\_buffers()}{video\_swap\_buffers()}}
+{\footnotesize\ttfamily int video\+\_\+swap\+\_\+buffers (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Swaps the buffers (front buffer and back buffer) 
+
+Implements double buffering via page flipping
+
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}

@@ -1,0 +1,78 @@
+\doxysection{i8042\+\_\+kbd.\+h}
+\hypertarget{i8042__kbd_8h_source}{}\label{i8042__kbd_8h_source}\index{C:/Users/USER/Downloads/lcom/proj/src/i8042\_kbd.h@{C:/Users/USER/Downloads/lcom/proj/src/i8042\_kbd.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_LCOM\_I8042\_KBD\_H\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_LCOM\_I8042\_KBD\_H\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <lcom/lcf.h>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{comment}{/*\ I/O\ Ports\ */}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#define\ KBD\_IRQ\ \ \ \ \ \ \ 1\ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ keyboard\ interrupt\ line}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ OUT\_BUF\ \ \ \ \ \ \ 0x60\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ output\ buffer\ port}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ KBC\_ARGS\ \ \ \ \ \ 0x60\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ same\ as\ output\ buffer,\ used\ for\ sending\ KBC\ command\ arguments}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ STATUS\_REG\ \ \ \ 0x64\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ status\ register\ port}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ KBC\_CMD\_REG\ \ \ 0x64\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ same\ as\ status\ register,\ but\ used\ for\ issuing\ KBC\ commands}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{/*\ Bit\ masks\ */}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ PARITY\ \ \ \ \ \ \ \ BIT(7)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask\ to\ check\ for\ parity\ error}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ TIME\_OUT\ \ \ \ \ \ BIT(6)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask\ to\ check\ for\ timeout\ error}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ AUX\ \ \ \ \ \ \ \ \ \ \ BIT(5)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask\ to\ check\ if\ we're\ receiving\ mouse\ data}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ IBF\ \ \ \ \ \ \ \ \ \ \ BIT(1)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask\ to\ check\ if\ input\ buffer\ is\ full}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ OBF\ \ \ \ \ \ \ \ \ \ \ BIT(0)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask\ to\ check\ if\ output\ buffer\ is\ full}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ KBC\_INT\ \ \ \ \ \ \ BIT(0)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask\ to\ check\ if\ keyboard\ interrupts\ are\ enabled}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ IS\_BREAK\ \ \ \ \ \ BIT(7)\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ bit\ mask\ to\ check\ if\ a\ scancode\ is\ a\ breakcode}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{/*\ Constants\ */}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ TWO\_BYTE\_SC\ \ \ 0xE0\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ value\ to\ check\ if\ we\ are\ dealing\ with\ a\ 2\ byte\ scan\ code}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ ESC\_MAKE\ \ \ \ \ \ 0x01\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ makecode\ for\ ESC}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ ESC\_BREAK\ \ \ \ \ 0x81\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ breakcode\ for\ ESC}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ KBC\_OK\ \ \ \ \ \ \ \ 0x55\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ code\ for\ valid\ keyboard\ controller}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ KBC\_ERR\ \ \ \ \ \ \ 0xFC\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ code\ for\ invalid\ keyboard\ controller}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{comment}{/*\ KBC\ Commands\ */}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ READ\_CMDB\ \ \ \ \ 0x20\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ read\ command\ byte}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ WRITE\_CMDB\ \ \ \ 0x60\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ write\ command\ byte}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ KBC\_CHK\ \ \ \ \ \ \ 0xAA\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ check\ keyboard\ controller;\ returns\ KBC\_OK\ if\ ok,\ else\ KBC\_ERR}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ KBI\_CHK\ \ \ \ \ \ \ 0xAB\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ check\ keyboard\ interface;\ returns\ 0\ if\ OK}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ KBI\_DIS\ \ \ \ \ \ \ 0xAD\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ disable\ keyboard\ interface}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ KBI\_ENA\ \ \ \ \ \ \ 0xAE\ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ enable\ keyboard\ interface}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{comment}{/*\ Keys\ */}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ LEFT\_ARROW\ \ \ \ 0x4b}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ RIGHT\_ARROW\ \ \ 0x4d}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ DOWN\_ARROW\ \ \ \ 0x50}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ UP\_ARROW\ \ \ \ \ \ 0x48}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ ENTER\ \ \ \ \ \ \ \ \ 0x1c}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#define\ SPACE\ \ \ \ \ \ \ \ \ 0x39}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ A\_T\ \ \ \ \ \ \ \ \ \ \ \ 0x1e}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ B\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x30}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ C\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x2e}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#define\ D\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x20}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#define\ E\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x12}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ F\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x21}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#define\ G\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x22}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ H\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x23}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#define\ I\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x17}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#define\ J\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x24}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ K\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x25}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#define\ L\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x26}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#define\ M\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x32}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#define\ N\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x31}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#define\ O\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x18}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#define\ P\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x19}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ Q\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x10}}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#define\ R\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x13}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#define\ S\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x1f}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ T\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x14}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#define\ U\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x16}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#define\ V\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x2f}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#define\ W\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x11}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#define\ X\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x2d}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#define\ Y\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x15}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#define\ Z\_T\ \ \ \ \ \ \ \ \ \ \ \ \ 0x2c}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\_LCOM\_I8042\_KBD\_H\_*/}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

@@ -1,0 +1,41 @@
+\doxysection{ui.\+h}
+\hypertarget{ui_8h_source}{}\label{ui_8h_source}\index{C:/Users/USER/Downloads/lcom/proj/src/ui.h@{C:/Users/USER/Downloads/lcom/proj/src/ui.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PROJ\_UI\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PROJ\_UI\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <lcom/lcf.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_button_ace0ea1e041508ea034774d9ce30d2c97}{pos\_x}};\ \ \ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_button_a8ec082255f92d7d2bfb71eb27a1b88c0}{pos\_y}};\ \ \ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_button_a0e36234059afd876afd386cd072ff077}{width}};\ \ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_button_a19996eb2f2a29e7cb91c5fb7f2d1d302}{height}};\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\mbox{\hyperlink{struct_button_a68443ec69e88c22fd1ae390044011806}{sprite}};\ \ \ \ \ }
+\DoxyCodeLine{00016\ \ \ \ \ void\ (*on\_click)(void);\ \ \ \ }
+\DoxyCodeLine{00017\ \}\ \mbox{\hyperlink{struct_button}{Button}};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_cursor_aff606866abb836fa8c390237fa110eb9}{pos\_x}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_cursor_aba69a49f70c22fab8ba716384b4506c2}{pos\_y}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_cursor_a50503803f214a05e0c6bff6524b02910}{width}};\ \ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_cursor_aed46e842dbbf7747def8852881869bb8}{height}};\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\mbox{\hyperlink{struct_cursor_a884762d676e74859b35269d3ad2cba3c}{sprite}};\ \ \ \ \ }
+\DoxyCodeLine{00028\ \}\ \mbox{\hyperlink{struct_cursor}{Cursor}};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_digit_a7f862c27175894c1e6c650f664202b27}{width}};\ \ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_digit_a93962bbf565ce5322dbba2af665ebc27}{height}};\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\mbox{\hyperlink{struct_digit_a07bfde532fc41133b391878242029fe0}{sprite}};\ \ \ \ \ }
+\DoxyCodeLine{00037\ \}\ \mbox{\hyperlink{struct_digit}{Digit}};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00051\ \mbox{\hyperlink{struct_button}{Button}}\ *create\_button(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ pos\_x,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ pos\_y,\ xpm\_map\_t\ xpm,\ \textcolor{keywordtype}{void}\ (*on\_click)(\textcolor{keywordtype}{void}));}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00063\ \mbox{\hyperlink{struct_cursor}{Cursor}}\ *create\_cursor(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ pos\_x,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ pos\_y,\ xpm\_map\_t\ xpm);}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

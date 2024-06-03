@@ -1,0 +1,33 @@
+\doxysection{mouse.\+h}
+\hypertarget{mouse_8h_source}{}\label{mouse_8h_source}\index{C:/Users/USER/Downloads/lcom/proj/src/mouse.h@{C:/Users/USER/Downloads/lcom/proj/src/mouse.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MOUSE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MOUSE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <lcom/lcf.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{bool}\ mouse\_ready;}
+\DoxyCodeLine{00009\ \textcolor{keyword}{extern}\ \textcolor{keyword}{struct\ }packet\ pp;}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00019\ int\ (mouse\_subscribe\_int)(uint8\_t\ *bit\_no);}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00028\ int\ (mouse\_unsubscribe\_int)();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00038\ int\ (mouse\_get\_status)(uint8\_t\ *st);}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00048\ int\ (mouse\_write\_cmd)(uint8\_t\ cmdb);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00059\ int\ (mouse\_read\_buffer)(uint8\_t\ port,\ uint8\_t\ *output);}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00068\ int\ (mouse\_disable\_data\_reporting)();}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00076\ void\ (mouse\_ih)();}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MOUSE\_H}}
+\DoxyCodeLine{00080\ }
+
+\end{DoxyCode}

@@ -1,0 +1,61 @@
+\doxysection{draw.\+h}
+\hypertarget{draw_8h_source}{}\label{draw_8h_source}\index{C:/Users/USER/Downloads/lcom/proj/src/draw.h@{C:/Users/USER/Downloads/lcom/proj/src/draw.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_DRAW\_H\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_DRAW\_H\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}entity.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}ui.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_ball}{Ball}}\ *ball;}
+\DoxyCodeLine{00008\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_wall}{Wall}}\ *top\_wall;}
+\DoxyCodeLine{00009\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_wall}{Wall}}\ *bottom\_wall;}
+\DoxyCodeLine{00010\ \textcolor{keyword}{extern}\ uint32\_t\ score;}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_button}{Button}}\ *play\_button;}
+\DoxyCodeLine{00013\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_button}{Button}}\ *quit;}
+\DoxyCodeLine{00014\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_button}{Button}}\ *instruction\_button;}
+\DoxyCodeLine{00015\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_cursor}{Cursor}}\ *cursor\_menu;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_player}{Player}}\ *player1;}
+\DoxyCodeLine{00018\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_player}{Player}}\ *player2;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{extern}\ uint16\_t\ x\_max;}
+\DoxyCodeLine{00021\ \textcolor{keyword}{extern}\ uint16\_t\ y\_max;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{extern}\ uint8\_t\ *background;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{bool}\ changed;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keywordtype}{bool}\ init\_digits(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00028\ \textcolor{keywordtype}{bool}\ init\_buttons(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00029\ \textcolor{keywordtype}{bool}\ init\_cursor(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00030\ \textcolor{keywordtype}{bool}\ init\_ball(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00031\ \textcolor{keywordtype}{bool}\ init\_walls(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00032\ \textcolor{keywordtype}{bool}\ init\_players(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00046\ \textcolor{keywordtype}{int}\ draw\_ball(\mbox{\hyperlink{struct_ball}{Ball}}\ *ball);}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00054\ \textcolor{keywordtype}{int}\ draw\_button(\mbox{\hyperlink{struct_button}{Button}}\ *button);}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00062\ \textcolor{keywordtype}{int}\ draw\_cursor(\mbox{\hyperlink{struct_cursor}{Cursor}}\ *cursor);}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00069\ \textcolor{keywordtype}{int}\ draw\_game();}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00076\ \textcolor{keywordtype}{int}\ draw\_menu();}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{keywordtype}{int}\ draw\_player();}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00089\ \textcolor{keywordtype}{bool}\ draw\_digit(\mbox{\hyperlink{struct_digit}{Digit}}\ *digit,\ uint16\_t\ x,\ uint16\_t\ y);}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00099\ \textcolor{keywordtype}{int}\ draw\_number(uint32\_t\ number,\ uint16\_t\ x,\ uint16\_t\ y);}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00106\ \textcolor{keywordtype}{int}\ draw\_frame();}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00114\ \textcolor{keywordtype}{int}\ draw\_wall(\mbox{\hyperlink{struct_wall}{Wall}}\ *wall);}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#endif\ }}
+
+\end{DoxyCode}

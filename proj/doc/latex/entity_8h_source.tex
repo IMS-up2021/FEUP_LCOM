@@ -1,0 +1,62 @@
+\doxysection{entity.\+h}
+\hypertarget{entity_8h_source}{}\label{entity_8h_source}\index{C:/Users/USER/Downloads/lcom/proj/src/entity.h@{C:/Users/USER/Downloads/lcom/proj/src/entity.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PROJ\_ENTITY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PROJ\_ENTITY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <lcom/lcf.h>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_player_a7294ab752d1ecaa6f616bdd44a5404ba}{x\_pos}};\ \ \ \ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_player_af3841c8d9d9d9de9d4f6a1476d7eebbb}{y\_pos}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_player_a13f7f0bb61f83a9e3287a29c750f4019}{width}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_player_abfde98c4bd141e7fe8a3e97b3dd08912}{height}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_player_a8b1391c49ecc9f528a615cbccdb6bbec}{number}};\ \ }
+\DoxyCodeLine{00016\ \}\ \mbox{\hyperlink{struct_player}{Player}};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ball_ab8d36b0e6238bc87fc5d53741bf3bb14}{radius}};\ \ \ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ball_a1a26f384a3259a38a9c8ba7f75858d30}{width}};\ \ \ \ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ball_a328a3422489fd1563b3f4a38c899ab2c}{height}};\ \ \ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ball_ab8b06717fe2e5a04e79dea6a25d2b55f}{x\_pos}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ball_a07290ca7931bfc6bb55063a291182213}{y\_pos}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{int}\ vX;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ball_a82ab9f742b8d25729a9976a368d78c56}{vY}};\ \ \ \ \ \ \ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_ball_ad432caf857a9a2a2a11db37917ffbb12}{angle}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00030\ \ \ \ \ uint8\_t\ *\mbox{\hyperlink{struct_ball_a8a79c42833a00cbe5edffce20062bc11}{sprite}};\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00031\ \}\ \mbox{\hyperlink{struct_ball}{Ball}};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_wall_af2867484d81e34689a11a32bdfaec0e4}{x\_pos}};\ \ \ \ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_wall_aacb565d2bd0d1b1c6fe6755e4b54db17}{y\_pos}};\ \ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_wall_a65ba2c30d935d97d572b835aacf88d2e}{width}};\ \ \ \ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_wall_acf2e2117c1ec78a2e2ead79c16c270e1}{height}};\ \ \ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_wall_a386e1c0f5a14d0d7a76ec1cbf6d2734b}{top}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00042\ \}\ \mbox{\hyperlink{struct_wall}{Wall}};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ PLAYER,\ \ \ }
+\DoxyCodeLine{00049\ \ \ \ \ WALL,\ \ \ \ \ }
+\DoxyCodeLine{00050\ \}\ CollisionType;}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00055\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{union\ }\{}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{struct_player}{Player}}\ *\mbox{\hyperlink{union_collision_entity_a7a2f857e380a541d0eaa5ed63dfaedd2}{player}};\ \ \ }
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{struct_wall}{Wall}}\ *\mbox{\hyperlink{union_collision_entity_a1e459e99fbba6b0dfbdfe8ba9474b5ad}{wall}};\ \ \ \ \ \ \ }
+\DoxyCodeLine{00058\ \}\ \mbox{\hyperlink{union_collision_entity}{CollisionEntity}};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00072\ \textcolor{keywordtype}{bool}\ collision\_handler(\mbox{\hyperlink{struct_ball}{Ball}}\ *ball,\ \mbox{\hyperlink{union_collision_entity}{CollisionEntity}}\ entity,\ CollisionType\ type);}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00084\ \textcolor{keywordtype}{bool}\ update\_ball(\mbox{\hyperlink{struct_ball}{Ball}}\ *ball);}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00094\ \mbox{\hyperlink{struct_ball}{Ball}}\ *create\_ball(xpm\_map\_t\ xpm);}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00104\ \mbox{\hyperlink{struct_wall}{Wall}}\ *create\_wall(\textcolor{keywordtype}{bool}\ top);}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \mbox{\hyperlink{struct_player}{Player}}\ *create\_player(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ number);}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
