@@ -1,4 +1,9 @@
 #include "kbd_event_handler.h"
+#include "draw.h"
+#include "interrupt_manager.h"
+
+bool changed;
+Player *player1;
 
 void handle_kbd_event(uint8_t scan_code[2]) {
     switch (state) {
@@ -18,6 +23,7 @@ void handle_kbd_event(uint8_t scan_code[2]) {
 void handle_kbd_instructions_event(uint8_t scan_code[2]) {
     if (scan_code[0] == ESC_BREAK) {
         state = MAIN_MENU;
+        changed = true;
     }
 }
 
@@ -27,13 +33,22 @@ void handle_kbd_game_event(uint8_t scan_code[2]) {
 
     if (two_byte) {
         switch (key_code) {
-                move_up();
+            case UP_ARROW:
+                move_up(player1);
                 break;
             case DOWN_ARROW:
-                move_down();
+                move_down(player1);
                 break;
             default: break;
         }
-    } // else if ()
+    } else if (scan_code[0] == ESC_BREAK) {
+        state = EXIT;
+    }
+}
+
+void handle_kbd_menu_event(uint8_t scan_code[2]) {
+    if (scan_code[0] == ESC_BREAK) {
+        state = EXIT;
+    }
 }
 

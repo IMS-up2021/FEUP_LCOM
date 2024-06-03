@@ -21,18 +21,29 @@
 #include "xpm/button_quit.h"
 #include "xpm/cursor.h"
 #include "xpm/background.h"
+#include "xpm/ball.h"
+#include "xpm/button_instructions.h"
+#include "xpm/instructions.h"
+#include "xpm/title.h"
 
 vbe_mode_info_t mode_info;
 
 Button *play_button;
 Cursor *cursor_menu;
 Button *quit;
+Button *instruction_button;
 Ball *ball;
-Wall *wall;
+Wall *top_wall;
+Wall *bottom_wall;
 
+Player *player1;
+Player *player2;
 Digit digits[10];
 
-uint32_t score = 0;
+
+unsigned int player1_score = 0;
+unsigned int player2_score = 0;
+
 
 uint16_t x_max = 1024;
 uint16_t y_max = 768;
@@ -40,10 +51,24 @@ uint16_t y_max = 768;
 game_state state;
 
 uint8_t *background;
+uint8_t *title;
 
 #define WIDTH_NUMBER 20
 #define COLOR_BACKGROUND 0x000000
 #define WALL_COLOR 0xFFFFFF
+
+bool changed = true;
+
+bool init_ball(void) {
+  ball = create_ball((xpm_map_t)ball_xpm);
+  return true;
+}
+
+bool init_walls(void) {
+  top_wall = create_wall(true);
+  bottom_wall = create_wall(false);
+  return true;
+}
 
 bool init_cursor(void) {
   cursor_menu = create_cursor(mouse_pos.x, mouse_pos.y, (xpm_map_t)cursor_xpm);
@@ -51,9 +76,16 @@ bool init_cursor(void) {
 }
 
 bool init_buttons(void) {
-  play_button = create_button(x_max / 3 - 133, y_max / 2 - 57, (xpm_map_t)button_play_xpm, play);
-  quit = create_button(2 * x_max / 3 - 133, y_max / 2 - 57, (xpm_map_t)button_quit_xpm, play);
+  play_button = create_button(x_max / 3 - 133, 2 * y_max / 4 - 57, (xpm_map_t)button_play_xpm, play);
+  quit = create_button(2 * x_max / 3 - 133, 2 * y_max / 4 - 57, (xpm_map_t)button_quit_xpm, exit_game);
+  instruction_button = create_button(x_max / 2 - 230, 3 * y_max / 4 - 57, (xpm_map_t)button_instructions_xpm, instructions);
 
+  return true;
+}
+
+bool init_players(void) {
+  player1 = create_player(1);
+  player2 = create_player(2);
   return true;
 }
 
@@ -81,6 +113,7 @@ bool init_digits(void) {
   sprite = xpm_load((xpm_map_t)xpm_9, XPM_INDEXED, &image);
   digits[9] = (Digit){ image.width, image.height, sprite };
   background = xpm_load((xpm_map_t)background_xpm, XPM_INDEXED, &image);
+  title = xpm_load((xpm_map_t)title_xpm, XPM_INDEXED, &image);
   return true;
 }
 
@@ -90,10 +123,34 @@ int draw_ball(Ball *ball) {
     return 1;
   }
 
-  // if (draw_sprite(ball->x_possprite, ball->x_pos, ball->y_pos)) {
-  //   printf("%s: draw_sprite(ball->x_possprite, ball->x_pos: %d, ball->y_pos: %d) error\n", __func__, ball->x_pos, ball->y_pos);
-  //   return 1;
-  // }
+  if ((int)ball->x_pos <= 0) {
+    player2_score++;
+    ball->x_pos = x_max / 2;
+    ball->y_pos = y_max / 2;
+    ball->angle = M_PI / 3;
+    ball->vX = 5; ball->vY = -5;
+    return 0;
+  } else if ((int)ball->x_pos >= x_max - (int)ball->width) {
+    player1_score++;
+    ball->x_pos = x_max / 2;
+    ball->y_pos = y_max / 2;
+    ball->angle = 4 * M_PI / 3;
+    ball->vX = -5; ball->vY = -5;
+    return 0;
+  }
+
+  if (player1_score == 10 || player2_score == 10) {
+    state = EXIT;
+    return 0;
+  }
+
+  for (uint16_t h = 0; h < ball->height; h++) {
+    for (uint16_t w = 0; w < ball->width; w++) {
+      if (video_draw_pixel(ball->x_pos + w, ball->y_pos + h, ball->sprite[w + h * ball->width])) {
+        return 1;
+      }
+    }
+  }
 
   return 0;
 }
@@ -107,20 +164,10 @@ int draw_button(Button *button) {
   for (uint16_t h = 0; h < button->height; h++) {
     for (uint16_t w = 0; w < button->width; w++) {
       if (video_draw_pixel(button->pos_x + w, button->pos_y + h, button->sprite[w + h * button->width])) {
-        // printf("%s: video_draw_pixel(x + w: %d, y + h: %d, color: 0x%x) error\n", __func__, x + w, y + h, button->sprite[w + h * button->width]);
         return 1;
       }
     }
   }
-
-  // if (!button->selected && draw_sprite(button->sprite, button->pos_x, button->pos_y)) {
-  //   printf("%s: draw_sprite(button->sprite, button->pos_x: %d, button->pos_y: %d) error\n", __func__, button->pos_x, button->pos_y);
-  //   return 1;
-  // }
-  // else if (button->selected && draw_sprite(button->sprite_selected, button->pos_x, button->pos_y)) {
-  //   printf("%s: draw_sprite(button->sprite_selected, button->pos_x: %d, button->pos_y: %d) error\n", __func__, button->pos_x, button->pos_y);
-  //   return 1;
-  // }
 
   return 0;
 }
@@ -135,7 +182,6 @@ int draw_cursor(Cursor *cursor) {
   for (uint16_t h = 0; h < cursor->height; h++) {
     for (uint16_t w = 0; w < cursor->width; w++) {
       if (video_draw_pixel(mouse_pos.x + w, mouse_pos.y + h, cursor->sprite[w + h * cursor->width])) {
-        // printf("%s: video_draw_pixel(x + w: %d, y + h: %d, color: 0x%x) error\n", __func__, x + w, y + h, button->sprite[w + h * button->width]);
         return 1;
       }
     }
@@ -144,18 +190,13 @@ int draw_cursor(Cursor *cursor) {
 }
 
 int draw_game() {
-  // if (draw_times(x_max * 0.05, y_max * 0.05)) {
-  //   printf("%s: draw_times(x_max * 0.05: %f, y_max * 0.05: %f)\n", __func__, x_max * 0.05, y_max * 0.05);
-  //   return 1;
-  // }
 
-  // bool game_over = false;
+  if (draw_number(player2_score, x_max * 0.95, y_max * 0.05)) {
+    printf("%s: draw_number(score: %d, x_max * 0.95: %f, y_max * 0.05: %f) error\n", __func__, score, x_max * 0.95, y_max * 0.05);
+    return 1;
+  }
 
-  // memset(*current, 0, sizeof(current));
-  // Player player1;
-  // Player player2;
-
-  if (draw_number(score, x_max * 0.95, y_max * 0.05)) {
+  if (draw_number(player1_score, x_max * 0.05, y_max * 0.05)) {
     printf("%s: draw_number(score: %d, x_max * 0.95: %f, y_max * 0.05: %f) error\n", __func__, score, x_max * 0.95, y_max * 0.05);
     return 1;
   }
@@ -165,17 +206,48 @@ int draw_game() {
     return 1;
   }
 
-  if (draw_wall(wall)) {
+  if (draw_wall(top_wall)) {
     printf("%s: draw_wall(wall) error\n", __func__);
     return 1;
   }
+
+  if (draw_wall(bottom_wall)) {
+    printf("%s: draw_wall(wall) error\n", __func__);
+    return 1;
+  }
+
+  if (draw_player(player1)) {
+    printf("%s: draw_wall(wall) error\n", __func__);
+    return 1;
+  }
+  
+  if (draw_player(player2)) {
+    printf("%s: draw_wall(wall) error\n", __func__);
+    return 1;
+  }
+  
 
   return 0;
 }
 
 int draw_menu() {
+
+  for (uint16_t h = 0; h < 200; h++) {
+    for (uint16_t w = 0; w < 1000; w++) {
+      if (video_draw_pixel(w + 12, 92 + h, title[w + h * 1000])) {
+        return 1;
+      }
+    }
+  }
+
+
   if (draw_button(play_button)) {
     printf("%s: draw_button(play) error\n", __func__);
+    return 1;
+  }
+
+  if (draw_button(instruction_button)) {
+    printf("%s: draw_button(instructions) error\n", __func__);
     return 1;
   }
 
@@ -209,6 +281,11 @@ bool draw_digit(Digit *digit, uint16_t x, uint16_t y) {
 
 int draw_number(uint32_t number, uint16_t x, uint16_t y) {
 
+  if (number < 9) {
+    draw_digit(&digits[number], x, y);
+    return 0;
+  }
+
   uint32_t reverse = 0;
 
   for (; number > 0; number /= 10) reverse = reverse * 10 + (number % 10);
@@ -223,19 +300,27 @@ int draw_number(uint32_t number, uint16_t x, uint16_t y) {
 
 
 int draw_frame() {
-  if (video_draw_background(COLOR_BACKGROUND)) {
-    printf("%s: video_draw_background(COLOR_BACKGROUND: 0x%x) error\n", __func__, COLOR_BACKGROUND);
-    return 1;
-  }
+  video_draw_background(background);
 
   switch (state)
   {
-  case (MAIN_MENU):
+  case (MAIN_MENU): {
+    if (changed) {
+      xpm_image_t image;
+      background = xpm_load((xpm_map_t)background_xpm, XPM_INDEXED, &image);
+      changed = false;
+    }
     return draw_menu();
-  case (PLAYING):
-    return draw_game();
-  
-  default:
+  } case (PLAYING):
+      return draw_game();
+    case INSTRUCTIONS: {
+      if (changed) {
+        xpm_image_t image;
+        background = xpm_load((xpm_map_t)instructions_xpm, XPM_INDEXED, &image);
+        changed = false;
+    }
+    break;
+  } default:
     break;
   }
 
@@ -248,7 +333,7 @@ int draw_wall(Wall *wall) {
     return 1;
   }
 
-  if (video_draw_rectangle(wall->x_pos, wall->y_pos, wall->width, wall->height, wall->top)) {
+  if (video_draw_rectangle(wall->x_pos, wall->y_pos, wall->width, wall->height, 63)) {
     printf("%s: video_draw_rectangle(wall->x_pos; %d, wall->y_pos: %d, wall->width: %d, wall->height: %d, WALL_COLOR: 0x%x) error\n", __func__, wall->x_pos, wall->y_pos, wall->width, wall->height, WALL_COLOR);
     return 1;
   }
@@ -256,25 +341,11 @@ int draw_wall(Wall *wall) {
   return 0;
 }
 
-
-// this is temporary
-int draw_instructions(){
-  printf("Welcome to Pong!\n\n");
-
-  printf("Controls:\n");
-  printf("Player 1 Controls:\n");
-  printf(" - Uses the mouse to move.\n");
-  printf("Player 2 Controls:\n");
-  printf(" - Move Up: Use the 'Up Arrow' key.\n");
-  printf(" - Move Down: Use the 'Down Arrow' key.\n\n");
-
-  printf("Gameplay:\n");
-  printf("1. Starting the Game: The game starts with the ball in the center of the screen. It will move in a random direction.\n");
-  printf("2. Moving the Paddle: Each player moves their paddle up and down to hit the ball. The goal is to hit the ball past the opponent’s paddle to score a point.\n");
-  printf("3. Scoring:\n");
-  printf(" - When the ball passes the opponent's paddle and hits the edge of the screen, the player scores a point.\n");
-  printf(" - The game continues, resetting the ball to the center each time a point is scored.\n");
-  printf("4. Winning the Game: The player with most points wins the game.\n");
-
+int draw_player(Player *player) {
+  for (uint16_t w = 0; w < player->width; w++) {
+    for (uint16_t h = 0; h < player->height; h++) {
+      video_draw_rectangle(player->x_pos, player->y_pos + h, player->width, 1, 63);
+    }
+  }
   return 0;
 }

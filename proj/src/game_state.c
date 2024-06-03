@@ -1,14 +1,29 @@
+#include <math.h>
+
 #include "game_state.h"
 #include "draw.h"
+#include "interrupt_manager.h"
 
 game_state state = MAIN_MENU;
 bool game_over = false;
 Position mouse_pos = {210, 330};
 
 
+uint64_t delta_time;
+
+bool changed;
+
 void play(void) {
+    state = PLAYING;
+}
+
+void exit_game(void) {
     state = EXIT;
-//  draw_game();
+}
+
+void (instructions)(void) {
+    state = INSTRUCTIONS;
+    changed = true;
 }
 
 
@@ -22,14 +37,14 @@ void update_mouse(int16_t x, int16_t y) {
 
 
 void (move_up)(Player *player) {
-     if (player->y_pos != 0){
-        player->y_pos--;     
+     if (player->y_pos > 0) {
+        player->y_pos = fmax((int)(player->y_pos - 50), 10)   /* 16.0f / delta_time */;
     }
 }
 
 void move_down(Player *player) {
-    if (player->y_pos - player->height <= 600){
-        player->y_pos++;     
+    if (player->y_pos + player->height < y_max - 10) {
+        player->y_pos = fmin(player->y_pos + 50, y_max - player->height - 10) /* (delta_time / 1000.0f) */;     
     }
 }
 

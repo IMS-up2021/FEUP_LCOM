@@ -1,3 +1,5 @@
+#include <sys/time.h>
+
 #include "interrupt_manager.h"
 
 #include "i8042_kbd.h"
@@ -13,6 +15,9 @@ uint32_t timer_irq_set, kbd_irq_set, mouse_irq_set;
 int kbd_i;
 bool mouse_ready;
 int timer_counter;
+
+uint64_t delta_time;
+
 
 int (init)() {
     uint8_t timer_bit_no, kbd_bit_no, mouse_bit_no;
@@ -59,16 +64,9 @@ int (init)() {
     init_digits();
     init_buttons();
     init_cursor();
-
-    // if (load_xpms() != OK) {
-    //     printf("Failed to load XPMs\n");
-    //     vg_exit();
-    //     mouse_disable_data_reporting();
-    //     mouse_unsubscribe_int();
-    //     kbd_unsubscribe_int();
-    //     timer_unsubscribe_int();
-    //     return EXIT_FAILURE;
-    // }
+    init_ball();
+    init_walls();
+    init_players();
 
     return EXIT_SUCCESS;
 }
@@ -77,8 +75,22 @@ int(main_loop)() {
     message msg;
     int ipc_status, r;
 
+    struct timeval previous;
+    struct timeval current;
+
+    double accum = 0.0f;
+
+    gettimeofday(&previous, NULL);
+
+
+    
     while (state != EXIT) {
 
+        gettimeofday(&current, NULL);
+        
+        delta_time = (current.tv_sec - previous.tv_sec) * 1000.0f + (current.tv_usec - previous.tv_usec) / 1000.0f;
+        accum += delta_time * 1.0f;
+        memcpy(&previous, &current, sizeof(struct timeval));
 
         if ((r = driver_receive(ANY, &msg, &ipc_status)) != OK) {
             printf("driver_receive failed with: %d\n", r);
@@ -123,10 +135,21 @@ int(main_loop)() {
             }
         }
 
-        video_draw_background(background);
-        draw_button(play_button);
-        draw_button(quit);
-        draw_cursor(cursor_menu);
+        while (accum > 1000.0f / 60.0f) {
+            if (state == PLAYING) update_ball(ball);
+            accum -= 1000.0f / 60.0f;
+        }
+
+
+        CollisionEntity entity = { .wall = top_wall };
+        collision_handler(ball, entity, WALL);
+        entity.wall = bottom_wall;
+        collision_handler(ball, entity, WALL);
+        entity.player = player1;
+        collision_handler(ball, entity, PLAYER);
+        entity.player = player2;
+        collision_handler(ball, entity, PLAYER);
+        draw_frame();
         video_swap_buffers();
 
     }
